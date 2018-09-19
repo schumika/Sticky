@@ -8,17 +8,21 @@
 
 import UIKit
 
-class StickyCollectionViewLayout: UICollectionViewLayout {
-    public var numberOfColumns = 1
+public class StickyCollectionViewLayout: UICollectionViewLayout {
+    private var numberOfColumns = 1
     public var shouldPinFirstColumn = true
     public var shouldPinFirstRow = true
+    
+    public var calculatedItemSize: (_ columnIndex: Int) -> (CGSize) = {_ in return CGSize.init(width: 60.0, height: 30.0)}
     
     private var itemAttributes = [[UICollectionViewLayoutAttributes]]()
     private var itemsSize = [CGSize]()
     private var contentSize: CGSize = .zero
     
-    override func prepare() {
+    override public func prepare() {
         guard let collectionView = collectionView, collectionView.numberOfSections > 0 else { return }
+        
+        numberOfColumns = collectionView.numberOfItems(inSection: 0)
         
         if itemAttributes.count != collectionView.numberOfSections {
             generateItemAttributes(collectionView: collectionView)
@@ -46,15 +50,15 @@ class StickyCollectionViewLayout: UICollectionViewLayout {
         }
     }
     
-    override var collectionViewContentSize: CGSize {
+    override public var collectionViewContentSize: CGSize {
         return contentSize
     }
     
-    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    override public func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return itemAttributes[indexPath.section][indexPath.row]
     }
     
-    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    override public func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var attributes = [UICollectionViewLayoutAttributes]()
         
         for section in 0 ..< (collectionView?.numberOfSections)! {
@@ -65,12 +69,12 @@ class StickyCollectionViewLayout: UICollectionViewLayout {
                     let contentOffset = col?.contentOffset
                     var origin = layout?.frame.origin
                     
-                    if (item == 0) {
+                    if (item == 0 && shouldPinFirstColumn) {
                         origin?.x = (contentOffset?.x)!
                         layout?.zIndex = 1022
                     }
                     
-                    if section == 0 {
+                    if section == 0 && shouldPinFirstRow {
                         origin?.y = (contentOffset?.y)!
                         layout?.zIndex = 1023
                         if (item == 0) {
@@ -88,7 +92,7 @@ class StickyCollectionViewLayout: UICollectionViewLayout {
     
     
     
-    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    override public func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
     
@@ -164,24 +168,8 @@ extension StickyCollectionViewLayout {
         itemsSize = []
         
         for index in 0 ..< numberOfColumns {
-            itemsSize.append(sizeForItemWithColumnIndex(index))
+            itemsSize.append(calculatedItemSize(index))
         }
-    }
-    
-    private func sizeForItemWithColumnIndex(_ columnIndex: Int) -> CGSize {
-        var text: NSString
-        
-        switch columnIndex {
-        case 0:
-            text = "MMM-99-YYYY"
-            
-        default:
-            text = "1234"
-        }
-        
-        let size: CGSize = text.size(withAttributes: [.font: UIFont.systemFont(ofSize: 14.0)])
-        let width: CGFloat = size.width + 16
-        return CGSize(width: width, height: 30)
     }
 }
 

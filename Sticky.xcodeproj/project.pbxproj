@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		27073F9620ECE4C7008DFD59 /* Sticky.h in Headers */ = {isa = PBXBuildFile; fileRef = 27073F9420ECE4C7008DFD59 /* Sticky.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2772BAA920F77C1A00D1F46C /* StickyCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2772BAA820F77C1A00D1F46C /* StickyCollectionViewLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		27073F9120ECE4C7008DFD59 /* Sticky.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sticky.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		27073F9420ECE4C7008DFD59 /* Sticky.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sticky.h; sourceTree = "<group>"; };
 		27073F9520ECE4C7008DFD59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2772BAA820F77C1A00D1F46C /* StickyCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickyCollectionViewLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 			isa = PBXGroup;
 			children = (
 				27073F9420ECE4C7008DFD59 /* Sticky.h */,
+				2772BAA820F77C1A00D1F46C /* StickyCollectionViewLayout.swift */,
 				27073F9520ECE4C7008DFD59 /* Info.plist */,
 			);
 			path = Sticky;
@@ -95,6 +98,7 @@
 				TargetAttributes = {
 					27073F9020ECE4C7008DFD59 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 0940;
 					};
 				};
 			};
@@ -130,6 +134,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2772BAA920F77C1A00D1F46C /* StickyCollectionViewLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +264,7 @@
 		27073F9A20ECE4C7008DFD59 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -275,6 +281,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.alarm.Sticky;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -283,6 +290,7 @@
 		27073F9B20ECE4C7008DFD59 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
