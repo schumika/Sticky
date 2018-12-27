@@ -10,26 +10,28 @@ import UIKit
 
 public class StickyCollectionViewLayout: UICollectionViewLayout {
     private var numberOfColumns = 1
+    private var numberOfRows = 1
     public var shouldPinFirstColumn = true
     public var shouldPinFirstRow = true
     
-    public var calculatedItemSize: (_ columnIndex: Int) -> (CGSize) = {_ in return CGSize.init(width: 60.0, height: 30.0)}
+    public var calculatedItemSize: (_ columnIndex: Int, _ rowIndex: Int) -> (CGSize) = {_, _ in return CGSize.init(width: 60.0, height: 30.0)}
     
     private var itemAttributes = [[UICollectionViewLayoutAttributes]]()
-    private var itemsSize = [CGSize]()
+    private var itemsSize = [[CGSize]]()
     private var contentSize: CGSize = .zero
     
     override public func prepare() {
         guard let collectionView = collectionView, collectionView.numberOfSections > 0 else { return }
         
         numberOfColumns = collectionView.numberOfItems(inSection: 0)
+        numberOfRows = collectionView.numberOfSections
         
-        if itemAttributes.count != collectionView.numberOfSections {
+        //if itemAttributes.count != collectionView.numberOfSections {
             generateItemAttributes(collectionView: collectionView)
-            return
-        }
+          //  return
+        //}
         
-        for section in 0 ..< collectionView.numberOfSections {
+        for section in 0 ..< numberOfRows {
             for item in 0 ..< collectionView.numberOfItems(inSection: section) {
                 guard section != 0, item != 0 else { continue }
                 
@@ -101,9 +103,9 @@ public class StickyCollectionViewLayout: UICollectionViewLayout {
 
 extension StickyCollectionViewLayout {
     private func generateItemAttributes(collectionView: UICollectionView) {
-        if itemsSize.count != numberOfColumns {
+       //if itemsSize.count != numberOfColumns || itemsSize[0].count != numberOfRows {
             calculateItemSizes()
-        }
+        //}
         
         var column = 0
         var xOffset: CGFloat = 0
@@ -116,7 +118,7 @@ extension StickyCollectionViewLayout {
             var sectionAttributes: [UICollectionViewLayoutAttributes] = []
             
             for index in 0 ..< numberOfColumns {
-                let itemSize = itemsSize[index]
+                let itemSize = itemsSize[index][section]
                 let indexPath = IndexPath(item: index, section: section)
                 let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
                 attributes.frame = CGRect(x: xOffset, y: yOffset, width: itemSize.width, height: itemSize.height).integral
@@ -165,10 +167,13 @@ extension StickyCollectionViewLayout {
     }
     
     private func calculateItemSizes() {
-        itemsSize = []
+        itemsSize = [[]]
         
-        for index in 0 ..< numberOfColumns {
-            itemsSize.append(calculatedItemSize(index))
+        for colIndex in 0 ..< numberOfColumns {
+            itemsSize.append([])
+            for rowIndex in 0 ..< numberOfRows {
+                itemsSize[colIndex].append(calculatedItemSize(colIndex, rowIndex))
+            }
         }
     }
 }
